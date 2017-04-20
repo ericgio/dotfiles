@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+# Add git branch to prompt
+function parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
+# Merge the current branch into master and delete it
+function merge_and_delete_branch() {
+  local BRANCH=`name`
+
+  echo "Checking out \"master\"..."
+  co master
+
+  echo "Merging branch \"${BRANCH}\" into master..."
+  git merge $BRANCH
+
+  # Delete the branch
+  echo "Cleaning up branch \"${BRANCH}\"..."
+  gb -D $BRANCH
+}
+
+function join_by() {
+	local IFS="$1";
+	shift;
+	echo "$*";
+}
+
+# Format/highlight the bash prompt.
+# TODO: Define in .bash_prompt
+function proml() {
+  local        BLUE="\[\033[0;34m\]"
+  local         RED="\[\033[0;31m\]"
+  local   LIGHT_RED="\[\033[1;31m\]"
+  local       GREEN="\[\033[0;32m\]"
+  local LIGHT_GREEN="\[\033[1;32m\]"
+  local       WHITE="\[\033[1;37m\]"
+  local  LIGHT_GRAY="\[\033[0;37m\]"
+  case $TERM in
+  xterm*)
+  TITLEBAR='\[\033]0;\u@\h:\w\007\]'
+  ;;
+  *)
+  TITLEBAR=""
+  ;;
+  esac
+
+# \u@\h:\w = {username}@{homedir}:{workingdir}
+PS1="${TITLEBAR}\
+$GREEN[$GREEN\h:\w$LIGHT_GRAY\$(parse_git_branch)$GREEN]\
+$GREEN\$ "
+PS2='> '
+PS4='+ '
+}
+
+# `s` with no arguments opens the current directory in Sublime Text, otherwise
+# opens the given location
+function s() {
+  if [ $# -eq 0 ]; then
+    subl .;
+  else
+    subl "$@";
+  fi;
+}
+
+# `a` with no arguments opens the current directory in Atom Editor, otherwise
+# opens the given location
+function a() {
+  if [ $# -eq 0 ]; then
+    atom .;
+  else
+    atom "$@";
+  fi;
+}
+
+# `v` with no arguments opens the current directory in Vim, otherwise opens the
+# given location
+function v() {
+  if [ $# -eq 0 ]; then
+    vim .;
+  else
+    vim "$@";
+  fi;
+}
+
+# `o` with no arguments opens the current directory, otherwise opens the given
+# location
+function o() {
+  if [ $# -eq 0 ]; then
+    open .;
+  else
+    open "$@";
+  fi;
+}

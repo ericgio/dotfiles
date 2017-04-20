@@ -1,82 +1,127 @@
-"Configuration file for vim
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" General
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set nocompatible          " get rid of Vi compatibility mode. SET FIRST!
 
-set nocp 
-filetype plugin on
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Theme/Colors
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set t_Co=256              " enable 256-color mode.
+syntax enable             " enable syntax highlighting (previously syntax on).
+colorscheme monokai       " set colorscheme
 
-" Normally we use vim-extensions. If you want true vi-compatibility
-" " remove change the following statements
-set nocompatible        " Use Vim defaults instead of 100% vi compatibility
-set backspace=indent,eol,start  " more powerful backspacing
-
-" Now we set some defaults for the editor 
-set autoindent          " always set autoindenting on
-set textwidth=0         " Don't wrap words by default
-set nobackup            " Don't keep a backup file
-set viminfo='20,\"50    " read/write a .viminfo file, don't store more than
-                        " 50 lines of registers
-set history=50          " keep 50 lines of command line history
-set ruler               " show the cursor position all the time
-
-" Suffixes that get lower priority when doing tab completion for filenames.
-" These are files we are not likely to want to edit or read.
-set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
-
-" We know xterm-debian is a color terminal
-if &term =~ "xterm-debian" || &term =~ "xterm-xfree86"
-  set t_Co=16
-  set t_Sf=^[[3%dm
-  set t_Sb=^[[4%dm
+" Highlight characters that go over 80 columns (by drawing a border on the 81st)
+if exists('+colorcolumn')
+  set colorcolumn=81
+  highlight ColorColumn ctermbg=DarkGray
+else
+  highlight OverLength ctermbg=DarkGray ctermfg=white guibg=#592929
+  match OverLength /\%81v.\+/
 endif
 
-" Make p in Visual mode replace the selected text with the "" register.
-vnoremap p <Esc>:let current_reg = @"<CR>gvdi<C-R>=current_reg<CR><Esc>
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" UI
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set number                " Enable line numbers
+if exists("&relativenumber")
+  set norelativenumber    " Don't use relative line numbers
+  au BufReadPost * set norelativenumber
+endif
 
-" Vim5 and later versions support syntax highlighting. Uncommenting the next
-" line enables syntax highlighting by default.
-" syntax on
+set cursorline            " Highlight current line
+set hlsearch              " Highlight searches
+set ignorecase            " Ignore case of searches
+set incsearch             " Highlight dynamically as pattern is typed
+set numberwidth=6         " make the number gutter 6 characters wide
+set list                  " Specify whether or not to show invisible chars
 
-" Debian uses compressed helpfiles. We must inform vim that the main
-" helpfiles is compressed. Other helpfiles are stated in the tags-file.
-set helpfile=$VIMRUNTIME/doc/help.txt.gz
+" Specify which invisible chars to show
+set listchars=tab:▸\ ,trail:·,eol:¬,nbsp:_
 
-set history=1024
-set magic
-syntax on
-highlight Comment term=bold ctermfg=7 guifg=#FF005F guibg=gray
-set ts=2
-set sw=2
-set sts=2
-set expandtab
+set laststatus=2          " Always show status line
+set mouse=a               " Enable mouse in all modes
+set noerrorbells          " Disable error bells
+set nostartofline         " Don’t reset cursor to start of line when moving around.
+set ruler                 " Show the cursor position
+set scrolloff=3           " Start scrolling three lines before the top/bottom
+set shortmess=atI         " Don’t show the intro message when starting Vim
+set showmode              " Show the current mode
+set title                 " Show the filename in the window titlebar
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Text Formatting/Layout
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set autoindent            " auto-indent
+set tabstop=2             " tab spacing
+set softtabstop=2         " unify
+set shiftwidth=2          " indent/outdent by 2 columns
+set shiftround            " always indent/outdent to the nearest tabstop
+set expandtab             " use spaces instead of tabs
+set smartindent           " automatically insert one extra level of indentation
+set smarttab              " use tabs at the start of a line, spaces elsewhere
+set nowrap                " don't wrap text
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Other
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set clipboard=unnamed     " Use the OS clipboard by default
+set wildmenu              " Enhance command-line completion
+set esckeys               " Allow cursor keys in insert mode
+
+" Allow backspace in insert mode
+set backspace=indent,eol,start
+
+set ttyfast               " Optimize for fast terminal connections
+set gdefault              " Add the g flag to search/replace by default
+set encoding=utf-8 nobomb " Use UTF-8 without BOM
+
+let mapleader=","         " Change mapleader
+
+" Add empty newlines at the end of files
+set binary
+set eol
+
+" Centralize backups, swapfiles and undo history
+set backupdir=~/.vim/backups
+set directory=~/.vim/swaps
+if exists("&undodir")
+  set undodir=~/.vim/undo
+endif
+
+" Don’t create backups when editing files in certain directories
+set backupskip=/tmp/*,/private/tmp/*
+
+" Respect modeline in files
+set modeline
+set modelines=4
+
+" Enable per-directory .vimrc files and disable unsafe commands in them
+set exrc
+set secure
+
+" Show the (partial) command as it’s being typed
+set showcmd
+
+" Strip trailing whitespace (,ss)
+function! StripWhitespace()
+  let save_cursor = getpos(".")
+  let old_query = getreg('/')
+  :%s/\s\+$//e
+  call setpos('.', save_cursor)
+  call setreg('/', old_query)
+endfunction
+
+noremap <leader>ss :call StripWhitespace()<CR>
+" Save a file as root (,W)
+noremap <leader>W :w !sudo tee % > /dev/null<CR>
+
+" Automatic commands
 if has("autocmd")
- " Enabled file type detection
- " Use the default filetype settings. If you also want to load indent files
- " to automatically do language-dependent indenting add 'indent' as well.
- filetype plugin on
-
-endif " has ("autocmd")
-
-" Some Debian-specific things
-augroup filetype
-  au BufRead reportbug.*                set ft=mail
-  au BufRead reportbug-*                set ft=mail
-augroup END
-
-" The following are commented out as they cause vim to behave a lot
-" different from regular vi. They are highly recommended though.
-set showcmd             " Show (partial) command in status line.
-set noshowmatch         " Show matching brackets.
-set ignorecase          " Do case insensitive matching
-set noincsearch         " Incremental search
-"set autowrite          " Automatically save before commands like :next and :make
-set nohlsearch
-set number              " turn on line numbers
-set numberwidth=5       " We are good up to 99999 lines
-
-" Make control-l lint the file.
-:nmap <C-l> :!php -l %<CR>
-
-" copy between files
-:vmap _Y :w! ~/.vi_tmp<CR>
-:nmap _P :r ~/.vi_tmp<CR>
+  " Enable file type detection
+  filetype on
+  " Treat .json files as .js
+  autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
+  " Treat .md files as Markdown
+  autocmd BufNewFile,BufRead *.md setlocal filetype=markdown
+endif
 
