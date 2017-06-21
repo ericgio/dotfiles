@@ -11,7 +11,7 @@ for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
 done;
 unset file;
 
-source ~/.profile
+# source ~/.profile
 source ~/.bashrc
 
 # Case-insensitive globbing (used in pathname expansion)
