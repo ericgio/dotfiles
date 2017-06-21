@@ -1,18 +1,20 @@
 # Dotfiles
 
-This repository contains my personal dotfiles and is based on [michaeljsmalley's dotfiles repository](https://github.com/michaeljsmalley/dotfiles).
+My personal dotfiles, based on [mathiasbynens's excellent dotfiles repository](https://github.com/mathiasbynens/dotfiles).
 
 ## Installation
-
 ``` bash
-$ git clone git://github.com/ericgio/dotfiles ~/dotfiles
-$ cd ~/dotfiles
-$ chmod +x install.sh
-$ ./install.sh
+$ git clone https://github.com/ericgio/dotfiles.git && cd dotfiles && source bootstrap.sh
 ```
 
-The install script will:
+Alternatively, to update while avoiding the confirmation prompt:
+```bash
+$ set -- -f; source bootstrap.sh
+```
 
-1. Back up any existing dotfiles in your home directory to `~/dotfiles/old/`
-2. Create symlinks to the dotfiles in `~/dotfiles/` in your home directory
-
+## Installing Homebrew formulae
+```bash
+# Set proper permissions on the script the first time around.
+$ chmod +x brew.sh
+$ ./brew.sh
+```
