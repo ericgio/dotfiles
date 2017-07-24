@@ -184,6 +184,11 @@ defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
 defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true
 # Don't smooth images when zoomed in
 defaults write com.apple.universalaccess closeViewSmoothImages -bool false
+# When zoomed in, the screen image moves:
+# 	- 0 (continuously with pointer)
+# 	- 1 (only when the pointer reaches an edge)
+# 	- 2 (so the pointer is at or near the center of the screen)
+defaults write com.apple.universalaccess closeViewPanningMode -int 0
 
 # Disable press-and-hold for keys in favor of key repeat
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
