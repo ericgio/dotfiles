@@ -14,7 +14,6 @@
 	"fold_buttons": false,
 	"folder_exclude_patterns": [
 		".git",
-		"node_modules"
 	],
 	"ignored_packages": [
 		"Vintage"
@@ -24,7 +23,7 @@
 	"show_encoding": true,
 	"show_line_endings": true,
 	"tab_size": 2,
-	"translate_tabs_to_spaces": false,
+	"translate_tabs_to_spaces": true,
 	"trim_trailing_white_space_on_save": true,
 	"word_wrap": false
 }
