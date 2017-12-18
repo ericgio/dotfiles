@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-export PATH="$HOME/Applications/MAMP/bin/php/php5.6.30/bin:$PATH";
+# Add MAMP version of PHP to PATH.
+PATH="/Applications/MAMP/bin/php/php5.6.30/bin:$PATH";
