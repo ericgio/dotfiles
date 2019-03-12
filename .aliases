@@ -32,16 +32,19 @@ alias undo="git reset HEAD@{1} --soft" # Undo the last action
 alias h="HEAD"
 alias grh="git reset HEAD"
 alias r="git rebase"
-alias rebase="git fetch && r master" # This will update the tree and play your commits over it
-alias r5="r -i HEAD~5"
-alias r10="r -i HEAD~10"
-alias ri="r -i master"
+alias ri="r -i"
 alias rc="r --continue"
 alias cont="r --continue"
+alias ra="r --abort"
+alias rs="r --skip"
 
-alias land="merge_and_delete_branch"
-alias pull="git pull origin master" # This will merge master into any current commits
-alias ship="git push origin master"
+# `git fetch` retrieves data from the remote
+alias gf="g fetch"
+alias fetch="g fetch"
+
+# `git pull` does a `git fetch` followed by a `git merge` into the current branch
+alias pull="g pull"
+alias push="g push"
 alias ol="git log --pretty=oneline --decorate"
 alias oldates="git log --pretty=format:'%h %ai %an %s'"
 alias mine="git log --author=egiovanola --date=short --pretty=format:'%h %ad %s'"
